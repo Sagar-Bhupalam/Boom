@@ -38,29 +38,32 @@
             navigator.notification.vibrate(2000);
         }
         //Gets the geoLocation
-        function getGeoLocation() {
-            navigator.geolocation.getCurrentPosition(onSuccess, onError);
-        }
-        // onSuccess Geolocation
-        //
-        function onSuccess(position) {
-            var element = document.getElementById('geolocation');
-            element.innerHTML = 'Latitude: ' + position.coords.latitude + '<br />' +
-                            'Longitude: ' + position.coords.longitude + '<br />' +
-                            'Altitude: ' + position.coords.altitude + '<br />' +
-                            'Accuracy: ' + position.coords.accuracy + '<br />' +
-                            'Altitude Accuracy: ' + position.coords.altitudeAccuracy + '<br />' +
-                            'Heading: ' + position.coords.heading + '<br />' +
-                            'Speed: ' + position.coords.speed + '<br />' +
-                            'Timestamp: ' + position.timestamp + '<br />';
+
+        function onFindContact() {
+            // specify contact search criteria
+            var options = new ContactFindOptions();
+            options.filter = "";          // empty search string returns all contacts
+            options.multiple = true;      // return multiple results
+            filter = ["displayName"];   // return contact.displayName field
+
+            // find contacts
+            navigator.contacts.find(filter, onSuccess, onError, options);
         }
 
-        // onError Callback receives a PositionError object
+        // onSuccess: Get a snapshot of the current contacts
         //
-        function onError(error) {
-            alert('code: ' + error.code + '\n' +
-                'message: ' + error.message + '\n');
+        function onSuccess(contacts) {
+            for (var i = 0; i < contacts.length; i++) {
+                alert(contacts[i].displayName);
+            }
+        };
+
+        // onError: Failed to get the contacts
+        //
+        function onError(contactError) {
+            alert('onError!');
         }
+
 
         function getConnectionType() {
             var networkState = navigator.connection.type;
@@ -84,8 +87,8 @@
                 contact.displayName = "Plumber";
                 contact.nickname = "Plumber";       //specify both to support all devices
                 var name = new ContactName();
-                name.givenName = "Jane";
-                name.familyName = "Doe";
+                name.givenName = "Sagar";
+                name.familyName = "Bhupalam";
                 contact.name = name;
 
                 // save
@@ -130,7 +133,8 @@
   <br /><br /><br />
   <h1>The Worst Possible App in HISTORY</h1>
   <br /><br /><br />
-    <p><button onclick="doStuffOnContacts();"><h1>All about Contacts</h1></button></p><br />
+    <p><button onclick="doStuffOnContacts(); return false;"><h1>Contacts-adds Sagar</h1></button></p><br />
+    <p><button onclick="onFindContact(); return false;"><h1>Contacts-Finds All</h1></button></p><br />
     <p><button onclick="showAlert(); return false;"><h1>Notification Show Alert</h1></button></p><br />
     <p><button onclick="playBeep(); return false;"><h1>Notification Play Beep</h1> </button></p><br />
     <p><button onclick="vibrate(); return false;"><h1>Notification Vibrate</h1></button></p><br />
