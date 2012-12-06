@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Contact Example</title>
+    <title>Notification Example</title>
 
     <script type="text/javascript" charset="utf-8" src="cordova-2.2.0.js"></script>
     <script type="text/javascript" charset="utf-8">
@@ -13,56 +13,128 @@
         // Cordova is ready
         //
         function onDeviceReady() {
-            // create
-            var contact = navigator.contacts.create();
-            contact.displayName = "Plumber";
-            contact.nickname = "Plumber";       //specify both to support all devices
-            var name = new ContactName();
-            name.givenName = "Jane";
-            name.familyName = "Doe";
-            contact.name = name;
-
-            // save
-            contact.save(onSaveSuccess, onSaveError);
-
-            // clone
-            var clone = contact.clone();
-            clone.name.givenName = "John";
-            console.log("Original contact name = " + contact.name.givenName);
-            console.log("Cloned contact name = " + clone.name.givenName);
-
-            // remove
-            contact.remove(onRemoveSuccess, onRemoveError);
+            // Empty
         }
 
-        // onSaveSuccess: Get a snapshot of the current contacts
+        // Show a custom alert
         //
-        function onSaveSuccess(contact) {
-            alert("Save Success");
+        function showAlert() {
+            navigator.notification.alert(
+            'Wassup Doc?',  // message
+            'Game Over',            // title
+            'Click me'                  // buttonName
+        );
         }
 
-        // onSaveError: Failed to get the contacts
+        // Beep three times
         //
-        function onSaveError(contactError) {
-            alert("Error = " + contactError.code);
+        function playBeep() {
+            navigator.notification.beep(3);
         }
 
-        // onRemoveSuccess: Get a snapshot of the current contacts
+        // Vibrate for 2 seconds
         //
-        function onRemoveSuccess(contacts) {
-            alert("Removal Success");
+        function vibrate() {
+            navigator.notification.vibrate(2000);
         }
-
-        // onRemoveError: Failed to get the contacts
+        //Gets the geoLocation
+        function getGeoLocation() {
+            navigator.geolocation.getCurrentPosition(onSuccess, onError);
+        }
+        // onSuccess Geolocation
         //
-        function onRemoveError(contactError) {
-            alert("Error = " + contactError.code);
+        function onSuccess(position) {
+            var element = document.getElementById('geolocation');
+            element.innerHTML = 'Latitude: ' + position.coords.latitude + '<br />' +
+                            'Longitude: ' + position.coords.longitude + '<br />' +
+                            'Altitude: ' + position.coords.altitude + '<br />' +
+                            'Accuracy: ' + position.coords.accuracy + '<br />' +
+                            'Altitude Accuracy: ' + position.coords.altitudeAccuracy + '<br />' +
+                            'Heading: ' + position.coords.heading + '<br />' +
+                            'Speed: ' + position.coords.speed + '<br />' +
+                            'Timestamp: ' + position.timestamp + '<br />';
         }
 
+        // onError Callback receives a PositionError object
+        //
+        function onError(error) {
+            alert('code: ' + error.code + '\n' +
+                'message: ' + error.message + '\n');
+        }
+
+        function getConnectionType() {
+            var networkState = navigator.connection.type;
+
+            var states = {};
+            states[Connection.UNKNOWN] = 'You Bet!!!';
+            states[Connection.ETHERNET] = 'Ethernet connection';
+            states[Connection.WIFI] = 'WiFi connection';
+            states[Connection.CELL_2G] = 'Cell 2G connection';
+            states[Connection.CELL_3G] = 'Cell 3G connection';
+            states[Connection.CELL_4G] = 'Cell 4G connection';
+            states[Connection.NONE] = 'No network connection';
+
+            alert('Connected?  ' + states[networkState]);
+        }
+
+        function doStuffOnContacts() {
+            
+                // create
+                var contact = navigator.contacts.create();
+                contact.displayName = "Plumber";
+                contact.nickname = "Plumber";       //specify both to support all devices
+                var name = new ContactName();
+                name.givenName = "Jane";
+                name.familyName = "Doe";
+                contact.name = name;
+
+                // save
+                contact.save(onSaveSuccess, onSaveError);
+
+                // clone
+                var clone = contact.clone();
+                clone.name.givenName = "John";
+                console.log("Original contact name = " + contact.name.givenName);
+                console.log("Cloned contact name = " + clone.name.givenName);
+
+                // remove
+                contact.remove(onRemoveSuccess, onRemoveError);
+            }
+            // onSaveSuccess: Get a snapshot of the current contacts
+            //
+            function onSaveSuccess(contact) {
+                alert("Save Success");
+            }
+
+            // onSaveError: Failed to get the contacts
+            //
+            function onSaveError(contactError) {
+                alert("Error = " + contactError.code);
+            }
+
+            // onRemoveSuccess: Get a snapshot of the current contacts
+            //
+            function onRemoveSuccess(contacts) {
+                alert("Removal Success");
+            }
+
+            // onRemoveError: Failed to get the contacts
+            //
+            function onRemoveError(contactError) {
+                alert("Error = " + contactError.code);
+            }
+        
     </script>
   </head>
-  <body>
-    <h1>Example</h1>
-    <p>Find Contacts</p>
+  <body style="background-color:#E4E4E4;">
+  <br /><br /><br />
+  <h1>The Worst Possible App in HISTORY</h1>
+  <br /><br /><br />
+    <p><button onclick="doStuffOnContacts();"><h1>All about Contacts</h1></button></p><br />
+    <p><button onclick="showAlert(); return false;"><h1>Notification Show Alert</h1></button></p><br />
+    <p><button onclick="playBeep(); return false;"><h1>Notification Play Beep</h1> </button></p><br />
+    <p><button onclick="vibrate(); return false;"><h1>Notification Vibrate</h1></button></p><br />
+    <p><button onclick="getGeoLocation();"><h1>Get Geo Location</h1></button></p><br />
+    <p><button onclick="getConnectionType(); return false;"><h1>Get Connection Type</h1></button></p><br />
   </body>
 </html>
